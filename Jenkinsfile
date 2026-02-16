@@ -17,5 +17,11 @@ pipeline {
                 sh 'npm install'
             }
         }
+
+        stage('NPM Dependency Audit') {
+            steps {
+                sh 'npm audit --audit-level=high'
+            }
+        }
     }
 }
