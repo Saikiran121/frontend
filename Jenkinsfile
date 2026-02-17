@@ -70,5 +70,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Unit Testing') {
+            steps {
+                sh 'npm test'
+            }
+
+            post {
+                always {
+                    junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/test-results.xml'
+                }
+            }
+        }
     }
 }
