@@ -53,6 +53,18 @@ pipeline {
                             )
                             // This allows you to download the raw HTML report
                             archiveArtifacts artifacts: 'dependency-check-report/*.html', fingerprint: true
+                        
+                            junit allowEmptyResults: true, keepProperties: true, testResults: 'dependency-check-report/dependency-check-junit.xml'
+                            publishHTML([
+                                allowMissing: true, 
+                                alwaysLinkToLastBuild: true, 
+                                icon: '', 
+                                keepAll: true, 
+                                reportDir: 'dependency-check-report', 
+                                reportFiles: 'dependency-check-report.html', 
+                                reportName: 'Dependency Check HTML Report'
+                            ])
+                        
                         }
                     }
                 }
