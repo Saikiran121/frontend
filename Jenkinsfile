@@ -26,18 +26,26 @@ pipeline {
 
         stage('OWASP Dependency Check') {
             steps {
-                withCredentials([string(credentialsId: 'owasp-token', variable: 'OWASP_Token')]) {
+                withCredentials([string(credentialsId: 'owasp-token', variable: 'OWASP-Token')]) {
                     sh """
                         ${tool 'OWASP-Dependency-Check-12'}/bin/dependency-check.sh \
                             --scan . \
                             --format HTML \
                             --project "frontend" \
-                            --nvdApiKey \$OWASP_Token \
+                            --nvdApiKey \$OWASP-Token \
                             --disableYarnAudit \
                             --failOnCVSS 7 \
                             --suppression dependency-check-suppressions.xml \
                             --out ./dependency-check-report
                     """
+                }
+            }
+
+            post {
+                always {
+                    dependencyCheckPublisher(
+                        pattern: 'dependency-check-report/dependency-check-report.xml'
+                    )
                 }
             }
         }
